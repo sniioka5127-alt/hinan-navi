@@ -49,6 +49,35 @@ Large map and hazard datasets are intentionally kept outside this GitHub reposit
 
 ---
 
+## Core Safety verification
+
+Core Safety is the highest-priority verification layer. Historical / training features are tracked separately and do not substitute for evacuation-path verification.
+
+Current evidence status:
+
+```text
+NAV-01 browser / integration gate        PASS_CLOSED
+NAV-01 repeatability                     3 / 3 PASS
+Android Emulator integration             PASS_CLOSED
+Android Emulator cold start              PASS
+Real JMA scan (Aomori City)              59 / 59, errors 0
+Hazard static routes                     82 verified
+Routing graph tiles                      2,150 verified
+Shelter static cells                     295 verified
+
+Not yet verified
+Real GPS field QA                        PENDING
+Physical Android device QA               NOT_RUN
+```
+
+These results mean that the browser / emulator integration path and packaged Core Safety assets have passed the recorded gates. They do **not** mean that a physical Android device or real-world GPS field behavior has been validated.
+
+The project therefore does not claim that any generated route or shelter is guaranteed safe.
+
+The detailed evidence matrix and status definitions are maintained in [docs/release-and-qa.md](docs/release-and-qa.md), which is the authoritative release-evidence record.
+
+---
+
 ## Historical Disaster Archive
 
 The current production release includes a unified historical-disaster search namespace:
@@ -81,39 +110,32 @@ Important boundaries:
 - no automatic georeferenced disaster-extent inference
 - modern administrative codes, where used, are search / reference aids rather than claims about historical jurisdiction
 
+Historical Archive / training verification is tracked as a separate upper-layer release concern. It does not close the remaining real-device / real-GPS Core Safety gaps.
+
 ---
 
 ## Release verification
 
-The current production release was closed only after:
-
-- static integration QA
-- real Microsoft Edge browser QA
-- human visual review
-- BASE_M6 read-only / no-replay verification
-- Special Historical 4-of-4 rendering verification
-- base restore verification
-- production activation / query-backdoor negative QA
-- local canonical-production verification
-- Hostinger remote smoke verification
-- byte-for-byte remote SHA-256 verification of the 19-file production delta
-
-Current release state:
+Current high-level state:
 
 ```text
-Historical Disaster Archive
-BASE_M6                         821
-Special Historical               4
-Unified Search                  825
+Core Safety
+NAV-01 Browser Gate                    PASS_CLOSED
+Android Emulator Integration           PASS_CLOSED
+Real GPS Field QA                      PENDING
+Physical Android Device QA             NOT_RUN
 
-Local Real Edge QA              PASS_CLOSED
-Human Visual QA                 PASS_CLOSED
-Hostinger Remote Smoke          PASS_CLOSED
-Remote deployment file identity 19 / 19 SHA256 MATCH
-Release                         PASS_CLOSED
+Historical / Training Layer
+BASE_M6                                821
+Special Historical                      4
+Unified Search                         825
+Historical Archive QA                  PASS_CLOSED
+Historical Archive I18N                PASS_CLOSED_PRODUCTION
 ```
 
-See [docs/release-and-qa.md](docs/release-and-qa.md) and [releases/v1.0.0.md](releases/v1.0.0.md).
+Earlier Historical Archive deployment evidence included local Real Edge QA, human visual QA, Hostinger smoke verification, and byte-identity checks for the release delta. Later production repairs and I18N revisions are tracked as subsequent revisions rather than being collapsed into that earlier delta statement.
+
+See [docs/release-and-qa.md](docs/release-and-qa.md) for the authoritative evidence matrix and [releases/v1.0.0.md](releases/v1.0.0.md) for the Historical Disaster Archive release record.
 
 ---
 
