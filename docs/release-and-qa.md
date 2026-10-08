@@ -23,6 +23,7 @@ Passing the Historical / Training layer does not close unresolved Core Safety fi
 - `PASS_CLOSED_PRODUCTION` — the stated production-facing feature / behavior has passed its defined closure checks.
 - `PENDING` — required verification remains outstanding.
 - `NOT_RUN` — the stated environment or test was not executed.
+- `DEFERRED_NO_ANDROID_REAL_DEVICE` — Android real-device verification is intentionally deferred because no physical Android device was available; this is not a product-failure classification.
 
 A PASS status must always be read together with its environment and scope.
 
@@ -38,7 +39,11 @@ A PASS status must always be read together with its environment and scope.
 | Shelter data | 295 occupied shelter cells verified against manifest bytes / SHA-256 | `295 VERIFIED` | Static shelter-data integrity |
 | Android Emulator packaging / launch | APKS install + cold start | `PASS_CLOSED` | Android Emulator only |
 | Real JMA transport on Android Emulator | Aomori City: 59 selected / 59 scanned / 0 scan errors | `PASS` | Android Emulator + real JMA network |
-| Physical Android device | Not executed | `NOT_RUN` | No physical Android device evidence |
+| Family-contact SMS production | V01-NAT-FAMILY-CONTACT-SMS-03 production promotion + Real Edge verification | `PASS_CLOSED` | Production web / PWA application boundary |
+| iOS Safari SMS handoff | Human-observed real-device handoff with recipient + body prefill and no auto-send | `PROVEN` | iPhone Safari only |
+| iOS PWA SMS handoff | Human-observed real-device handoff from installed home-screen PWA | `PROVEN` | iPhone PWA only |
+| Android real-device SMS handoff | No physical Android device available | `DEFERRED_NO_ANDROID_REAL_DEVICE` | Android OS handoff not yet proven |
+| Physical Android device | Not executed | `NOT_RUN` | No broader physical Android device evidence |
 | Real GPS field QA | Required by NAV-01 gate, not executed | `PENDING` | No real-world GPS / field closure |
 
 ### NAV-01 browser gate
@@ -96,6 +101,7 @@ The following remain open:
 ```text
 REAL_GPS_FIELD_QA=PENDING
 PHYSICAL_ANDROID_DEVICE_QA=NOT_RUN
+ANDROID_REAL_DEVICE_SMS_HANDOFF=DEFERRED_NO_ANDROID_REAL_DEVICE
 ```
 
 Until those are executed, the project must not claim complete physical-device / real-world GPS validation.
@@ -106,6 +112,76 @@ The project also does not claim:
 - guaranteed safe shelter
 - no hazard data means safe
 - straight-line connector as an evacuation route
+
+## Family communication / SMS evidence
+
+The production family-contact SMS feature was promoted and verified under:
+
+```text
+V01-NAT-FAMILY-CONTACT-SMS-03
+SMS03_PRODUCTION_PROMOTION=PASS_CLOSED
+V01_NAT_FAMILY_CONTACT_SMS_03=PASS_CLOSED
+```
+
+Production byte identities recorded at closure:
+
+```text
+index.html
+128DCD3560EAEEA2E0BCF8425152D285B7633640975C30EE18A320170A46D315
+
+runtime-emergency/emergency-simple-runtime-v0.1.js
+72A225CFF3949B1BA69EB2F8694DFB3D4988A5F8C87CF1EB94C688AD94BBE81C
+```
+
+Real Edge production verification passed the defined SMS gates:
+
+- 0 / 1 / 2 / 3 contact flows
+- one-contact auto-selection
+- explicit re-selection when multiple contacts exist
+- 119 / 110 rejection from the family-recipient list
+- maximum three contacts
+- five exact evacuation-status messages
+- recipient-prefilled `sms:` URI generation
+- `現在地：未取得` fallback
+- no new GPS acquisition by the SMS flow
+- persistence across reload
+- delete / reselection behavior
+- Service Worker controlled / activated
+- LIVE-03 runtime regression gate
+- Real Edge stability
+- application-origin contact-data exfiltration gate
+
+The Edge environment contained Kaspersky endpoint-security injection. Six QA observations containing dummy contact test values were directed to a Kaspersky endpoint and were classified as endpoint-security interception rather than application transport. The blocking application-origin contact leak count was zero.
+
+This means the project may state **no application-origin contact-data exfiltration was observed in the defined QA**. It must not convert that result into an absolute claim that browser extensions, endpoint-security products, or other privileged local software cannot inspect page content.
+
+### iOS real-device handoff
+
+Human real-device verification on iPhone confirmed:
+
+```text
+IOS_SAFARI_SMS_HANDOFF=PROVEN
+IOS_PWA_SMS_HANDOFF=PROVEN
+IOS_REAL_OS_SMS_HANDOFF=PROVEN
+IOS_RECIPIENT_PREFILL_REAL_DEVICE=PROVEN
+IOS_SMS_BODY_REAL_DEVICE=PROVEN
+IOS_NO_AUTO_SEND_REAL_DEVICE=PROVEN
+USER_FINAL_SEND_REQUIRED=PROVEN
+```
+
+The observed message body included the expected evacuation-start text and the location fallback when UI05 location was unavailable.
+
+### Android real-device handoff
+
+```text
+ANDROID_REAL_DEVICE_SMS_HANDOFF=DEFERRED_NO_ANDROID_REAL_DEVICE
+```
+
+No Android handoff failure was observed; the Android real-device check simply was not executable because no physical Android device was available.
+
+The iOS closure does not close broader physical Android or real-world GPS field validation.
+
+See [the family-contact SMS release record](../releases/2026-10-08-family-contact-sms.md).
 
 ## Historical / Training layer
 

@@ -64,10 +64,14 @@ Real JMA scan (Aomori City)              59 / 59, errors 0
 Hazard static routes                     82 verified
 Routing graph tiles                      2,150 verified
 Shelter static cells                     295 verified
+Family-contact SMS production            PASS_CLOSED
+iOS Safari SMS handoff                   PROVEN
+iOS PWA SMS handoff                      PROVEN
 
 Not yet verified
 Real GPS field QA                        PENDING
 Physical Android device QA               NOT_RUN
+Android real-device SMS handoff          DEFERRED_NO_ANDROID_REAL_DEVICE
 ```
 
 These results mean that the browser / emulator integration path and packaged Core Safety assets have passed the recorded gates. They do **not** mean that a physical Android device or real-world GPS field behavior has been validated.
@@ -75,6 +79,41 @@ These results mean that the browser / emulator integration path and packaged Cor
 The project therefore does not claim that any generated route or shelter is guaranteed safe.
 
 The detailed evidence matrix and status definitions are maintained in [docs/release-and-qa.md](docs/release-and-qa.md), which is the authoritative release-evidence record.
+
+---
+
+## Family communication / SMS
+
+Production family-contact SMS support is now verified for the web / PWA path.
+
+Current recorded status:
+
+```text
+V01-NAT-FAMILY-CONTACT-SMS-03             PASS_CLOSED
+iOS Safari real-device SMS handoff        PROVEN
+iOS PWA real-device SMS handoff           PROVEN
+Android real-device SMS handoff           DEFERRED_NO_ANDROID_REAL_DEVICE
+```
+
+The implemented safety contract is:
+
+- 1–3 family contacts
+- contact name and phone number stored by the application in browser-local storage
+- 119 / 110 are kept separate from family contacts
+- one contact may be selected automatically; multiple contacts require explicit recipient selection
+- five fixed evacuation-status messages
+- existing UI05 location is reused; the SMS flow does not start a new GPS acquisition
+- if no UI05 location is available, the message uses `現在地：未取得`
+- the application creates the message and opens the OS SMS composer
+- the application does **not** send SMS automatically; final send remains a user action
+
+Real-device iPhone testing verified the handoff in both Safari and the installed home-screen PWA, including recipient prefill, message body transfer, and the no-auto-send boundary.
+
+During Windows / Edge QA, Kaspersky endpoint-security injection was observed inspecting form content. This was classified separately from application transport: blocking application-origin contact-data exfiltration remained zero. Accordingly, “local-only” is an **application-boundary** claim and is not a claim that browser extensions or endpoint-security software cannot inspect page content.
+
+This iOS evidence does not close the still-unrun physical Android or real-world GPS field-validation work.
+
+See [the family-contact SMS release record](releases/2026-10-08-family-contact-sms.md) and [docs/release-and-qa.md](docs/release-and-qa.md) for the evidence boundary.
 
 ---
 
@@ -131,6 +170,12 @@ Special Historical                      4
 Unified Search                         825
 Historical Archive QA                  PASS_CLOSED
 Historical Archive I18N                PASS_CLOSED_PRODUCTION
+
+Family Communication Layer
+Family-contact SMS production          PASS_CLOSED
+iOS Safari SMS handoff                 PROVEN
+iOS PWA SMS handoff                    PROVEN
+Android real-device SMS handoff        DEFERRED_NO_ANDROID_REAL_DEVICE
 ```
 
 Earlier Historical Archive deployment evidence included local Real Edge QA, human visual QA, Hostinger smoke verification, and byte-identity checks for the release delta. Later production repairs and I18N revisions are tracked as subsequent revisions rather than being collapsed into that earlier delta statement.
