@@ -1,5 +1,18 @@
 # Changelog
 
+## 2026-10-29 — R24 baseline and production UI R27–R30
+
+Status: **PUBLIC UI CONFIRMED, WARNING-COMPLETENESS UNVERIFIED**.
+
+- Kept the responsive R24 baseline; R25 / R25A / R25B region-registration revisions remain HOLD and are not activated.
+- R27–R28: hazard navigation and permanent warning-coverage cautions adapted for production; header overlap corrected.
+- R29: public hazard/menu grouping, family/pet/help presentation and optional official GSI online raster controls observed. Partial coverage and no-current-warning inference remain explicit.
+- R30: user-confirmed dismissible advisory detail card, retained top status indication, reopen from the status chip, and menu accessibility after dismissal.
+- The reception engine has **not** been proven to receive all warnings or all cancellation information; a captured advisory does not demonstrate a live all-clear.
+- Distribution site includes screenshots and offline-viewable/printable preparedness guidance; third-party data and source redistribution are not implicitly licensed.
+
+See [2026-10-29 public UI/safety record](releases/2026-10-29-public-ui-r30.md).
+
 ## 2026-10-08 — Family contact SMS production + iOS real-device handoff
 
 Status: **PASS_CLOSED**
