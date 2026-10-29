@@ -9,6 +9,8 @@ Its purpose is simple:
 Public application:  
 https://wakouzan-kichijoji.com/hinan-navi/
 
+**Public UI deployment (2026-10-29):** R24 was retained as the responsive baseline; R27–R30 addressed production hazard/menu presentation, persistent unverified-warning cautions, and dismissible/reopenable advisory cards. This is **UI evidence, not a guarantee** of timely, complete JMA warning reception. The R25 registered-region experiments remain on HOLD. [Read the dated release/safety record](releases/2026-10-29-public-ui-r30.md).
+
 ---
 
 ## Mission
